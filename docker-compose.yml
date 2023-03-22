@@ -1,0 +1,26 @@
+version: '3.1'
+services:
+  #serveur de base de donnees
+  mariadatabase:
+    image: mariadb:latest
+    container_name: mariadbprojet
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: 'root'
+      MARIADB_DATABASE: 'IGI-3014-TD9t-GP5'
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d:ro
+    ports:
+      - 3306:3306
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadminprojet
+    restart: always
+    links:
+      - mariadatabase
+    environment:
+      PMA_HOST: mariadatabase
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    ports:
+      - 80:80
